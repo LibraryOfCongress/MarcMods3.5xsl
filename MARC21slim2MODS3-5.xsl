@@ -4,8 +4,9 @@
 	<xsl:strip-space elements="*"/>
 
 	<!-- Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
-	MARC21slim2MODS3-5 (Revision 1.111) 20160324
-	
+	MARC21slim2MODS3-5 (Revision 1.112) 20180621
+
+Revision 1.112 - Fixed 700 ind1=0 to transform - tmee 2018/06/21
 Revision 1.111 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
 Revision 1.110 - Added test to prevent empty authority attribute for 336 with no subfield 2. - ws 2016/03/24
 Revision 1.109 - Added test to prevent empty authority attribute for 655 and use if ind2 if no subfield 2 is available. - ws 2016/03/24
