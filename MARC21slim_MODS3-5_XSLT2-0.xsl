@@ -8,7 +8,7 @@
 	<xsl:strip-space elements="*"/>
 	<!-- 
 		Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
-		MARC21slim2MODS3-5 (Revision 2.26) 20160324
+		MARC21slim2MODS3-5 (Revision 2.27) 20190319
 		
 		Revision 2.27 - Remove script attribute for elements with subfield 6, where there is no script identification code. - ws 2019/03/19
 		Revision 2.26 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
@@ -561,7 +561,7 @@
 				</xsl:for-each>
 
 				<recordOrigin>Converted from MARCXML to MODS version 3.5 using
-					MARC21slim2MODS3-5_XSL2-0.xsl (Revision 2.26 2016/3/24)</recordOrigin>
+					MARC21slim2MODS3-5_XSL2-0.xsl (Revision 2.27 2019/3/19)</recordOrigin>
 
 				<xsl:for-each select="marc:datafield[@tag='040']/marc:subfield[@code='b']">
 					<languageOfCataloging>
