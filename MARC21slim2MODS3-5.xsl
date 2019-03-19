@@ -2060,6 +2060,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		</xsl:for-each>
 
 		<xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
+			<!-- 1.113 -->
 			<!--<xsl:call-template name="createRelatedItemFrom490"/>-->
 			<xsl:variable name="s6" select="substring(normalize-space(marc:subfield[@code='6']), 5, 2)"/>
 			<relatedItem type="series">
@@ -3676,21 +3677,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				<xsl:value-of select="$sf06b"/>
 			</xsl:attribute>
 			<!-- 1.113 -->
-			<xsl:if test="$scriptCode != ''">
-				<xsl:attribute name="script">
-					<xsl:choose>
-						<xsl:when test="$scriptCode='(3'">Arab</xsl:when>
-						<xsl:when test="$scriptCode='(4'">Arab</xsl:when>
-						<xsl:when test="$scriptCode='(B'">Latn</xsl:when>
-						<xsl:when test="$scriptCode='!E'">Latn</xsl:when>
-						<xsl:when test="$scriptCode='$1'">CJK</xsl:when>
-						<xsl:when test="$scriptCode='(N'">Cyrl</xsl:when>
-						<xsl:when test="$scriptCode='(Q'">Cyrl</xsl:when>
-						<xsl:when test="$scriptCode='(2'">Hebr</xsl:when>
-						<xsl:when test="$scriptCode='(S'">Grek</xsl:when>
-					</xsl:choose>
-				</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="scriptCode"/>
 		</xsl:if>
 	</xsl:template>
 
