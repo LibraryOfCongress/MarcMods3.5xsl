@@ -10,6 +10,7 @@
 		Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
 		MARC21slim2MODS3-5 (Revision 2.26) 20160324
 		
+		Revision 2.27 - Remove script attribute for elements with subfield 6, where there is no script identification code. - ws 2019/03/19
 		Revision 2.26 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
 		Revision 2.25 - Added test to prevent empty authority attribute for 655 and use if ind2 if no subfield 2 is available. - ws 2016/03/24
 		Revision 2.24 - Added test to prevent empty authority attribute for 336 with no subfield 2. - ws 2016/03/24
@@ -4890,20 +4891,8 @@
 			<xsl:attribute name="altRepGroup">
 				<xsl:value-of select="$sf06b"/>
 			</xsl:attribute>
-			<xsl:attribute name="script">
-				<xsl:choose>
-					<xsl:when test="$scriptCode=''">Latn</xsl:when>
-					<xsl:when test="$scriptCode='(3'">Arab</xsl:when>
-					<xsl:when test="$scriptCode='(4'">Arab</xsl:when>
-					<xsl:when test="$scriptCode='(B'">Latn</xsl:when>
-					<xsl:when test="$scriptCode='!E'">Latn</xsl:when>
-					<xsl:when test="$scriptCode='$1'">CJK</xsl:when>
-					<xsl:when test="$scriptCode='(N'">Cyrl</xsl:when>
-					<xsl:when test="$scriptCode='(Q'">Cyrl</xsl:when>
-					<xsl:when test="$scriptCode='(2'">Hebr</xsl:when>
-					<xsl:when test="$scriptCode='(S'">Grek</xsl:when>
-				</xsl:choose>
-			</xsl:attribute>
+			<!-- 2.27 -->
+			<xsl:call-template name="scriptCode"/>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="xxx7xxt">
@@ -5023,10 +5012,10 @@
 	<xsl:template name="scriptCode">
 		<xsl:variable name="sf06" select="normalize-space(marc:subfield[@code='6'])"/>
 		<xsl:variable name="scriptCode" select="substring($sf06, 8, 2)"/>
-		<xsl:if test="//marc:datafield/marc:subfield[@code='6']">
+		<!-- 2.27  -->
+		<xsl:if test="//marc:datafield/marc:subfield[@code='6'] and $scriptCode != ''">
 			<xsl:attribute name="script">
 				<xsl:choose>
-					<xsl:when test="$scriptCode=''">Latn</xsl:when>
 					<xsl:when test="$scriptCode='(3'">Arab</xsl:when>
 					<xsl:when test="$scriptCode='(4'">Arab</xsl:when>
 					<xsl:when test="$scriptCode='(B'">Latn</xsl:when>

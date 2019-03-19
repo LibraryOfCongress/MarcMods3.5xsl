@@ -6,6 +6,7 @@
 	<!-- Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
 	MARC21slim2MODS3-5 (Revision 1.112) 20180621
 
+Revision 1.113 - Remove script attribute for elements with subfield 6, where there is no script identification code. - ws 2019/03/19
 Revision 1.112 - Fixed 700 ind1=0 to transform - tmee 2018/06/21
 Revision 1.111 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
 Revision 1.110 - Added test to prevent empty authority attribute for 336 with no subfield 2. - ws 2016/03/24
@@ -2059,7 +2060,28 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		</xsl:for-each>
 
 		<xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
-			<xsl:call-template name="createRelatedItemFrom490"/>
+			<!--<xsl:call-template name="createRelatedItemFrom490"/>-->
+			<xsl:variable name="s6" select="substring(normalize-space(marc:subfield[@code='6']), 5, 2)"/>
+			<relatedItem type="series">
+				<xsl:for-each
+					select=". | ../marc:datafield[@tag='880']
+					[starts-with(marc:subfield[@code='6'],'490')]
+					[substring(marc:subfield[@code='6'],5,2) = $s6]">
+					<titleInfo>
+						<xsl:call-template name="xxx880"/>
+						<title>
+							<xsl:call-template name="chopPunctuation">
+								<xsl:with-param name="chopString">
+									<xsl:call-template name="subfieldSelect">
+										<xsl:with-param name="codes">av</xsl:with-param>
+									</xsl:call-template>
+								</xsl:with-param>
+							</xsl:call-template>
+						</title>
+						<xsl:call-template name="part"/>
+					</titleInfo>
+				</xsl:for-each>
+			</relatedItem>
 		</xsl:for-each>
 
 
@@ -3622,10 +3644,10 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 		<xsl:variable name="sf06b" select="substring($sf06, 5, 2)"/>
 		<xsl:variable name="sf06c" select="substring($sf06, 7)"/>
 		<xsl:variable name="scriptCode" select="substring($sf06, 8, 2)"/>
-		<xsl:if test="//marc:datafield/marc:subfield[@code='6']">
+		<!-- 1.113 -->
+		<xsl:if test="//marc:datafield/marc:subfield[@code='6'] and $scriptCode != ''">
 			<xsl:attribute name="script">
 				<xsl:choose>
-					<xsl:when test="$scriptCode=''">Latn</xsl:when>
 					<xsl:when test="$scriptCode='(3'">Arab</xsl:when>
 					<xsl:when test="$scriptCode='(4'">Arab</xsl:when>
 					<xsl:when test="$scriptCode='(B'">Latn</xsl:when>
@@ -3649,13 +3671,14 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			<xsl:variable name="sf06b" select="substring($sf06, 5, 2)"/>
 			<xsl:variable name="sf06c" select="substring($sf06, 7)"/>
 			<xsl:variable name="scriptCode" select="substring($sf06, 8, 2)"/>
-			<xsl:if test="//marc:datafield/marc:subfield[@code='6']">
-				<xsl:attribute name="altRepGroup">
-					<xsl:value-of select="$sf06b"/>
-				</xsl:attribute>
+			<!-- 1.113 -->
+			<xsl:attribute name="altRepGroup">
+				<xsl:value-of select="$sf06b"/>
+			</xsl:attribute>
+			<!-- 1.113 -->
+			<xsl:if test="$scriptCode != ''">
 				<xsl:attribute name="script">
 					<xsl:choose>
-						<xsl:when test="$scriptCode=''">Latn</xsl:when>
 						<xsl:when test="$scriptCode='(3'">Arab</xsl:when>
 						<xsl:when test="$scriptCode='(4'">Arab</xsl:when>
 						<xsl:when test="$scriptCode='(B'">Latn</xsl:when>
@@ -4132,10 +4155,8 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			<xsl:when test="$sf06a='856'">
 				<xsl:call-template name="createLocationFrom856"/>
 			</xsl:when>
-
-			<xsl:when test="$sf06a='490'">
-				<xsl:call-template name="createRelatedItemFrom490"/>
-			</xsl:when>
+			<!-- 1.113 -->
+			<xsl:when test="$sf06a='490'"/>
 		</xsl:choose>
 	</xsl:template>
 
