@@ -8,7 +8,7 @@
 	<xsl:strip-space elements="*"/>
 	<!-- 
 		Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
-		MARC21slim2MODS3-5 (Revision 2.27) 20190319
+		MARC21slim2MODS3-5 (Revision 2.31) 20190325
 		
 		Revision 2.31 - Changed all relatedItem 880/subfield[@code=6] rules to use '=' rather than 'match()' to find corresponding data. - ws 2019/03/25 
 		Revision 2.30 - Add type='series' to 490 only if @ind1 = '0'. - ws 2019/03/25
@@ -565,7 +565,7 @@
 				</xsl:for-each>
 
 				<recordOrigin>Converted from MARCXML to MODS version 3.5 using
-					MARC21slim2MODS3-5_XSL2-0.xsl (Revision 2.27 2019/3/19)</recordOrigin>
+					MARC21slim2MODS3-5_XSL2-0.xsl (Revision 2.31 2019/3/25)</recordOrigin>
 
 				<xsl:for-each select="marc:datafield[@tag='040']/marc:subfield[@code='b']">
 					<languageOfCataloging>

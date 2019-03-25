@@ -4,12 +4,13 @@
 	<xsl:strip-space elements="*"/>
 
 	<!-- Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
-	MARC21slim2MODS3-5 (Revision 1.113) 20190319
+	MARC21slim2MODS3-5 (Revision 1.116) 20190325
 
 Revision 1.116 - Add corresponding 880 for 830 fields with subfield 6. - ws 2019/03/25
 Revision 1.115 - Suppress empty originInfo/issuance when leader does not match given conditions. - ws 2019/03/25
-Revision 1.114 - Ensure 264/880 are output. - ws 2019/03/25
-Revision 1.113 - Remove script attribute for elements with subfield 6, where there is no script identification code. - ws 2019/03/19
+Revision 1.114 - Ensure 264 and corresponding 880 are output correctly. - ws 2019/03/25
+Revision 1.113 - Remove script attribute for elements with subfield 6, where there is no script identification code. 
+				 Suppress duplicate 490 content via <xsl:template match="marc:datafield" mode="trans880"> - ws 2019/03/19
 Revision 1.112 - Fixed 700 ind1=0 to transform - tmee 2018/06/21
 Revision 1.111 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
 Revision 1.110 - Added test to prevent empty authority attribute for 336 with no subfield 2. - ws 2016/03/24
@@ -2805,7 +2806,7 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			</xsl:for-each>
 
 			<recordOrigin>Converted from MARCXML to MODS version 3.5 using MARC21slim2MODS3-5.xsl
-				(Revision 1.113 (Revision 1.113 2019/03/19)</recordOrigin>
+				(Revision 1.116 (Revision 1.116 2019/03/25)</recordOrigin>
 
 			<xsl:for-each select="marc:datafield[@tag=040]/marc:subfield[@code='b']">
 				<languageOfCataloging>
