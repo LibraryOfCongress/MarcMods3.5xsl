@@ -2059,11 +2059,12 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 			<xsl:call-template name="createLocationFrom856"/>
 		</xsl:for-each>
 
-		<xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
+		<xsl:for-each select="marc:datafield[@tag=490]">
 			<!-- 1.113 -->
 			<!--<xsl:call-template name="createRelatedItemFrom490"/>-->
 			<xsl:variable name="s6" select="substring(normalize-space(marc:subfield[@code='6']), 5, 2)"/>
-			<relatedItem type="series">
+			<relatedItem>
+				<xsl:if test="@ind1=1"><xsl:attribute name="type">series</xsl:attribute></xsl:if>
 				<xsl:for-each
 					select=". | ../marc:datafield[@tag='880']
 					[starts-with(marc:subfield[@code='6'],'490')]
@@ -2084,7 +2085,6 @@ Revision 1.02 - Added Log Comment  2003/03/24 19:37:42  ckeith
 				</xsl:for-each>
 			</relatedItem>
 		</xsl:for-each>
-
 
 		<xsl:for-each select="marc:datafield[@tag=440]">
 			<relatedItem type="series">
