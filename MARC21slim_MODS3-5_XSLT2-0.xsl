@@ -10,11 +10,13 @@
 		Maintenance note: For each revision, change the content of <recordInfo><recordOrigin> to reflect the new revision number.
 		MARC21slim2MODS3-5 (Revision 2.31) 20190325
 		
-		Revision 2.31 - Changed all relatedItem 880/subfield[@code=6] rules to use '=' rather than 'match()' to find corresponding data. - ws 2019/03/25 
-		Revision 2.30 - Add type='series' to 490 only if @ind1 = '0'. - ws 2019/03/25
-		Revision 2.29 - Add 880 for subfield 264 with subfield 6. - ws 2019/03/25
-		Revision 2.28 - Suppress empty originInfo/issuance when leader does not match given conditions. - ws 2019/03/25
-		Revision 2.27 - Remove script attribute for elements with subfield 6, where there is no script identification code. - ws 2019/03/19
+		Revision 2.31 - For all relatedItem elements change the XPath to use = rather then match() to find corresponding data - ws 2019/03/25 
+		Revision 2.30 - Add 880 output for 264 with corresponding subfield 6. - ws 2019/03/25
+		Revision 2.29 - Suppress empty orginInfo/issuance when leader does not match given conditions in XSLT.  - ws 2019/03/25
+
+		Revision 2.28 - Remove ind1=1 constraint on template match 490 so all 490 fields output correctly, add series to 490 if @ind1='1' - ws 2019/03/25
+		Revision 2.27 - Remove invalid script attributes. Script function was incorrectly interpreting an empty value as Latin script. Now empty value does not create a script attribute. - ws 2019/03/25
+		
 		Revision 2.26 - Added test to prevent empty authority attribute for 047 with no subfield 2. - ws 2016/03/24
 		Revision 2.25 - Added test to prevent empty authority attribute for 655 and use if ind2 if no subfield 2 is available. - ws 2016/03/24
 		Revision 2.24 - Added test to prevent empty authority attribute for 336 with no subfield 2. - ws 2016/03/24
@@ -474,6 +476,7 @@
 
 			<!-- Call templates for related item -->
 			<!-- series -->
+			<!-- 2.28 -->
 			<xsl:apply-templates select="marc:datafield[@tag='490']" mode="relatedItem"/>
 			<xsl:apply-templates select="marc:datafield[@tag='440']" mode="relatedItem"/>
 			<!-- isReferencedBy -->
@@ -1523,7 +1526,7 @@
 					mode="orginInfo"/>
 
 				<!-- Build issuance element -->
-				<!-- 2.28 -->
+				<!-- 2.29 -->
 				<xsl:variable name="issuance">
 					<xsl:choose>
 						<xsl:when
@@ -1646,7 +1649,7 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- 2.13 WS: added 264 to orginInfo -->
-	<!-- 2.29 -->
+	<!-- 2.30 -->
 	<xsl:template match="marc:datafield[@tag='264'] | marc:datafield[@tag='880'][starts-with(marc:subfield[@code='6'],'264')]" mode="orginInfo">
 		<xsl:if test="@ind2 ='0' or @ind2 ='1'or @ind2 ='2' or @ind2 ='3'">
 			<originInfo>
@@ -4002,10 +4005,11 @@
 	</xsl:template>
 
 	<!-- Related Item templates -->
+	<!-- 2.28 -->
 	<xsl:template match="marc:datafield[@tag='490']" mode="relatedItem">
 		<xsl:variable name="s6" select="substring(normalize-space(marc:subfield[@code='6']), 5, 2)"/>
 		<relatedItem>
-			<!-- 2.30 -->
+			<!-- 2.28 -->
 			<xsl:if test="@ind1 = '0'"><xsl:attribute name="type">series</xsl:attribute></xsl:if>
 			<!-- 2.31 -->
 			<xsl:for-each
